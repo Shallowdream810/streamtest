@@ -1,10 +1,12 @@
 package com.company;
 
 import com.entity.Apple;
+import com.entity.Test;
 import jdk.nashorn.internal.runtime.Source;
 import jdk.nashorn.internal.runtime.linker.LinkerCallSite;
 
 import java.security.Key;
+import java.text.SimpleDateFormat;
 import java.time.temporal.ValueRange;
 import java.util.*;
 import java.util.function.Predicate;
@@ -15,11 +17,12 @@ public class Main {
 
     public static void main(String[] args) {
 	    List<Apple> list = new ArrayList<>();
-	    list.add(new Apple(1,"red","天津",200));
-        list.add(new Apple(2,"blue","河北",400));
-        list.add(new Apple(3,"red","安徽",300));
-        list.add(new Apple(4,"red","杭州",400));
-        list.add(new Apple(5,"red","上海",100));
+        list.add(new Apple(3,"red","安徽",1599045795000l));//今天
+        list.add(new Apple(1,"red","天津",1599045795000l));//今天
+        list.add(new Apple(2,"blue","河北",1598959394000l));//昨天
+        list.add(new Apple(5,"red","上海",1598789987000l));//2020-08-30 20:19:47
+        list.add(new Apple(4,"red","杭州",1596370787000l));//2020-08-02 20:19:47
+//        System.out.println(list);
 
 //        list.stream().filter(apple -> apple.getWeight()>=200).limit(2).forEach(apple -> System.out.println(apple));
         //重量降序
@@ -40,9 +43,24 @@ public class Main {
 //        collect.forEach((k,v)-> System.out.println("k:"+k+"====v:"+v));
 
         //按照苹果的重量进行分组，分成key是重量，value是list。
-        Map<Integer, List<Apple>> collect1 = list.stream().collect(Collectors.groupingBy(apple -> apple.getWeight()));
-        System.out.println(collect1);
-
+        List<Test> list1 = new ArrayList<>();
+        Map<String, List<Apple>> collect = list.stream()
+                .sorted(Comparator.comparing(Apple::getWeight).reversed())
+                .collect(Collectors.groupingBy(apple -> new SimpleDateFormat("yyyy-MM-dd").format(new Date(apple.getWeight()))));
+        for (Map.Entry<String, List<Apple>> stringListEntry : collect.entrySet()) {
+            Test te = new Test();
+            te.setDate(stringListEntry.getKey());
+            te.setApples(stringListEntry.getValue());
+            list1.add(te);
+        }
+        List<Test> collect1 = list1.stream().sorted(Comparator.comparing(Test::getDate).reversed()).collect(Collectors.toList());
+        System.out.println("p="+collect1);
+        for (Test test : collect1) {
+            System.out.println(test.getDate());
+            for (Apple apple : test.getApples()) {
+                System.out.println(apple);
+            }
+        }
 //        collect.forEach(apple -> System.out.println(apple));
 //        list.forEach(apple -> apple.setWeight(apple.getWeight()+200));
 //        list.forEach(apple -> System.out.println(apple));

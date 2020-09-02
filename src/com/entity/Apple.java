@@ -10,17 +10,17 @@ public class Apple {
     private Integer id;
     private String color;
     private String addr;
-    private Integer weight;
+    private Long weight;
 
-    public Integer getWeight() {
+    public Long getWeight() {
         return weight;
     }
 
-    public void setWeight(Integer weight) {
+    public void setWeight(Long weight) {
         this.weight = weight;
     }
 
-    public Apple(Integer id, String color, String addr, Integer weight) {
+    public Apple(Integer id, String color, String addr, Long weight) {
         this.id = id;
         this.color = color;
         this.addr = addr;
